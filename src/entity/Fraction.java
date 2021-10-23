@@ -26,6 +26,7 @@ public class Fraction {
     public Fraction(int n, int m) {
         this.numerator = Integer.toString(n);
         this.denominator = Integer.toString(m);
+        simplify();
     }
 
     /**
@@ -35,8 +36,8 @@ public class Fraction {
      */
     public Fraction(String f) {
         if (!f.contains("/")) {
-            this.numerator = f;
-            this.denominator = "1";
+            this.numerator = Integer.toString(Integer.parseInt(f) * 2);
+            this.denominator = "2";
         } else if (!f.contains("'")) {
             this.numerator = f.substring(0, f.lastIndexOf("/"));
             this.denominator = f.substring(f.lastIndexOf("/") + 1);
@@ -46,6 +47,30 @@ public class Fraction {
             this.numerator = Integer.toString(Integer.parseInt(f.substring(f.lastIndexOf("'") + 1, f.lastIndexOf("/"))) +
                     Integer.parseInt(denominator) * N);
         }
+        simplify();
+    }
+
+    /**
+     * 将分数约分至最简
+     */
+    private void simplify() {
+        if ("0".equals(numerator)) {
+            return;
+        }
+        int n = Integer.parseInt(numerator);
+        int m = Integer.parseInt(denominator);
+        int b = Math.max(n, m);
+        int s = Math.min(n, m);
+        int r = b;
+        while (r != 0) {
+            r = b % s;
+            b = s;
+            if (r != 0) {
+                s = r;
+            }
+        }
+        numerator = Integer.toString(n / s);
+        denominator = Integer.toString(m / s);
     }
 
     /**

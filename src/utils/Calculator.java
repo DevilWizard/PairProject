@@ -55,7 +55,11 @@ public class Calculator {
         Stack<String> s1 = new Stack<>();
         for (String item : polandExp) {
             if (isNum(item)) {
-                s1.push(item);
+                if (isProperFraction(item)) {
+                    s1.push(new Fraction(item).toString());
+                } else {
+                    s1.push(item);
+                }
             } else {
                 num1 = s1.pop();
                 num2 = s1.pop();
