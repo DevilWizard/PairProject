@@ -1,5 +1,7 @@
 package main;
 
+import ui.MainWindow;
+
 /**
  * 主函数，程序的入口
  *
@@ -7,4 +9,9 @@ package main;
  * @email ozx1341530199@gmail.com
  */
 public class Main {
+    public static void main(String[] args) {
+        new MainWindow().init();
+    }
+
+
 }

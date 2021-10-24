@@ -24,11 +24,15 @@ public class Calculator {
     /**
      * 乘法运算符
      */
-    public static final String OP_MULTIPLY = "*";
+    public static final String OP_MULTIPLY = "×";
     /**
      * 除法运算符
      */
     public static final String OP_DIVIDE = "÷";
+    /**
+     * 除数为0的错误标识
+     */
+    public static final String ERROR_DIVIDE_BY_ZERO = "divide by 0 error";
 
     /**
      * 根据生成的表达式计算结果
@@ -42,11 +46,15 @@ public class Calculator {
         return calculate(polandList);
     }
 
+    public static void main(String[] args) {
+        System.out.println(calculate("15 ÷ 3 = "));
+    }
+
     /**
      * 接收逆波兰式来计算表达式结果
      *
      * @param polandExp List形式的逆波兰表达式
-     * @return 返回计算结果
+     * @return 返回计算结果，当出现除数为0的结果时返回错误信息
      */
     private static String calculate(List<String> polandExp) {
         String res;
@@ -64,17 +72,12 @@ public class Calculator {
                 num1 = s1.pop();
                 num2 = s1.pop();
                 //处理真分数计算
-                if (isProperFraction(num1) || isProperFraction(num2)) {
-                    res = calculatePf(item, num1, num2);
-                } else {
-                    res = switch (item) {
-                        case OP_ADD -> Integer.toString(Integer.parseInt(num1) + Integer.parseInt(num2));
-                        case OP_MINUS -> Integer.toString(Integer.parseInt(num2) - Integer.parseInt(num1));
-                        case OP_MULTIPLY -> Integer.toString(Integer.parseInt(num1) * Integer.parseInt(num2));
-                        case OP_DIVIDE -> Integer.toString(Integer.parseInt(num1) / Integer.parseInt(num2));
-                        default -> throw new RuntimeException("运算符有误");
-                    };
+                //num2为0且为除法时，直接重新生成表达式
+                Fraction f = new Fraction(num1);
+                if (OP_DIVIDE.equals(item) && "0".equals(f.toString())) {
+                    return ERROR_DIVIDE_BY_ZERO;
                 }
+                res = calculatePf(item, num1, num2);
                 s1.push(res);
             }
         }
@@ -98,7 +101,7 @@ public class Calculator {
             case OP_ADD -> new Fraction(impf1.getN() * impf2.getM() + impf2.getN() * impf1.getM(), impf1.getM() * impf2.getM());
             case OP_MINUS -> new Fraction(impf2.getN() * impf1.getM() - impf1.getN() * impf2.getM(), impf1.getM() * impf2.getM());
             case OP_MULTIPLY -> new Fraction(impf1.getN() * impf2.getN(), impf1.getM() * impf2.getM());
-            case OP_DIVIDE -> new Fraction(impf1.getN() * impf2.getM(), impf1.getM() * impf2.getN());
+            case OP_DIVIDE -> new Fraction(impf1.getM() * impf2.getN(), impf1.getN() * impf2.getM());
             default -> throw new IllegalArgumentException(op + "is unrecognizable," + " the operator must be one of the \"+\" \"- \" \"*\" \"÷\"");
         };
 
@@ -167,6 +170,17 @@ public class Calculator {
     }
 
     /**
+     * 判断给定答案ans是否正确
+     *
+     * @param ans 待判断正确的答案
+     * @return 若答案正确则返回 {@code true}，否则返回{@code false}
+     */
+    public static boolean isCorrect(String qes, String ans) {
+        String realAns = calculate(qes);
+        return ans.matches("\\s*" + realAns + "\\s*");
+    }
+
+    /**
      * 判断是否为真分数，形如：2/3, 1/4, 1'1/2
      *
      * @param s 待判断的数
@@ -183,7 +197,7 @@ public class Calculator {
      * @return 如果c是运算符，返回{@code true}；否则返回{@code false}
      */
     private static boolean isSymbol(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '÷' || c == '(' || c == ')';
+        return c == '+' || c == '-' || c == '×' || c == '÷' || c == '(' || c == ')';
     }
 
     /**

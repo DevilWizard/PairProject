@@ -3,7 +3,6 @@ package utils;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 文件读写的工具类
@@ -13,7 +12,25 @@ import java.util.Objects;
  */
 public class FileUtils {
 
-    public static void writeAns() {
+    /**
+     * 生成题目同时给出答案
+     *
+     * @param number
+     * @param qes
+     * @param ans
+     * @param qWriter
+     * @param aWriter
+     */
+    public static void writeQesAndAns(int number, String qes, String ans, BufferedWriter qWriter, BufferedWriter aWriter) {
+        if (qWriter == null || aWriter == null) {
+            throw new IllegalArgumentException("writer is null!");
+        }
+        try {
+            qWriter.write(number + ". " + qes + "\n");
+            aWriter.write(number + ". " + ans + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -49,7 +66,7 @@ public class FileUtils {
                 int number = Integer.parseInt(question.substring(0, question.lastIndexOf(".")));
                 String qes = question.substring(question.lastIndexOf(".") + 1);
                 String ans = answer.substring(answer.lastIndexOf(".") + 1);
-                if (Objects.equals(Calculator.calculate(qes), ans)) {
+                if (Calculator.isCorrect(qes, ans)) {
                     correctList.add(number);
                 } else {
                     wrongList.add(number);
@@ -66,26 +83,25 @@ public class FileUtils {
             }
         }
         try {
-            writer = new BufferedWriter(new FileWriter(outputPath));
+            writer = new BufferedWriter(new FileWriter(outputPath + "\\Grade.txt"));
             writer.write("Correct: " + correctList.size() + " (");
             for (int i = 0; i < correctList.size(); i++) {
                 if (i == correctList.size() - 1) {
-                    writer.write(correctList.get(i));
+                    writer.write(Integer.toString(correctList.get(i)));
                     break;
                 }
                 writer.write(correctList.get(i) + ", ");
             }
             writer.write(")\n");
-            writer.write("Wrong: " + wrongList.size() + "(");
+            writer.write("Wrong: " + wrongList.size() + " (");
             for (int i = 0; i < wrongList.size(); i++) {
                 if (i == wrongList.size() - 1) {
-                    writer.write(wrongList.get(i));
+                    writer.write(Integer.toString(wrongList.get(i)));
                     break;
                 }
                 writer.write(wrongList.get(i) + ", ");
             }
             writer.write(")\n");
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

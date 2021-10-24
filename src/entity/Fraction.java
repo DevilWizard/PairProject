@@ -24,9 +24,9 @@ public class Fraction {
      * @param m 分母
      */
     public Fraction(int n, int m) {
+        check(n, m);
         this.numerator = Integer.toString(n);
         this.denominator = Integer.toString(m);
-        simplify();
     }
 
     /**
@@ -47,7 +47,19 @@ public class Fraction {
             this.numerator = Integer.toString(Integer.parseInt(f.substring(f.lastIndexOf("'") + 1, f.lastIndexOf("/"))) +
                     Integer.parseInt(denominator) * N);
         }
-        simplify();
+        check(f);
+    }
+
+    private void check(String f) {
+        if (Integer.parseInt(denominator) == 0) {
+            throw new IllegalArgumentException("Error! The denominator in " + f + " is zero");
+        }
+    }
+
+    private void check(int n, int m) {
+        if (m == 0) {
+            throw new IllegalArgumentException("Error! The denominator in " + n + "/" + m + " is zero");
+        }
     }
 
     /**
@@ -57,20 +69,17 @@ public class Fraction {
         if ("0".equals(numerator)) {
             return;
         }
-        int n = Integer.parseInt(numerator);
-        int m = Integer.parseInt(denominator);
-        int b = Math.max(n, m);
-        int s = Math.min(n, m);
-        int r = b;
-        while (r != 0) {
-            r = b % s;
-            b = s;
-            if (r != 0) {
-                s = r;
-            }
-        }
-        numerator = Integer.toString(n / s);
-        denominator = Integer.toString(m / s);
+        int a, b, n, m, r;
+        a = n = Integer.parseInt(numerator);
+        b = m = Integer.parseInt(denominator);
+        do {
+            r = a % b;
+            a = b;
+            b = r;
+        } while (b != 0);
+
+        numerator = Integer.toString(n / a);
+        denominator = Integer.toString(m / a);
     }
 
     /**
@@ -93,6 +102,7 @@ public class Fraction {
 
     @Override
     public String toString() {
+        simplify();
         return parse2Pf(numerator, denominator);
     }
 
@@ -106,6 +116,12 @@ public class Fraction {
     private String parse2Pf(String n, String m) {
         int denominatorI = Integer.parseInt(m);
         int numeratorI = Integer.parseInt(n);
+        if (Integer.parseInt(n) == 0) {
+            return "0";
+        }
+        if (numeratorI % denominatorI == 0) {
+            return Integer.toString(numeratorI / denominatorI);
+        }
         if (numeratorI < denominatorI) {
             return n + "/" + m;
         } else if (numeratorI == denominatorI) {
