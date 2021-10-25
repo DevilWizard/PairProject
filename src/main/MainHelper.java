@@ -1,8 +1,5 @@
 package main;
-
-import utils.Calculator;
-import utils.Expression;
-import utils.FileUtils;
+import utils.*;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

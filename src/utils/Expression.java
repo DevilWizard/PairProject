@@ -24,7 +24,6 @@ public class Expression {
         return a;
     }
 
-
     /**
      * 四则运算符生成器
      *
@@ -203,8 +202,9 @@ public class Expression {
      * @return 返回生成的表达式
      */
     private static String createExpression(int range) {
-        String finalexpression;
-        int choice = 1 + new Random().nextInt(3);
+        String finalexpression = "";
+        int choice = 3;
+        //int choice = 1 + new Random().nextInt(3);
         if (choice == 1) {
             String expression = "";
             String num1 = randomNum(range);
@@ -260,33 +260,59 @@ public class Expression {
                 }
             }
 
-            String answer1 = Calculator.calculate(expression);
-            if (hasError(answer1)) {
-                return answer1;
+            if (sym2 == '+' || sym2 == '-') {
+                String answer1 = Calculator.calculate(expression);
+                if (hasError(answer1)) {
+                    return answer1;
+                }
+
+                if (sym2 == '+') {
+                    expression = expression + " + " + num3 + " = ";
+                } else if (sym2 == '-') {
+                    if (islarge(answer1, num3)) {
+                        expression = expression + " - " + num3 + " = ";
+                    } else {
+                        expression = num3 + " - " + expression + " = ";
+                    }
+                }
+
+                finalexpression = expression;
+            } else if (sym2 == '×' || sym2 == '÷') {
+                String answer1 = Calculator.calculate(expression);
+                if (hasError(answer1)) {
+                    return answer1;
+                }
+
+                if (expression.contains("×") == true || expression.contains("÷") == true) {
+                    if (sym2 == '×') {
+                        expression = expression + " × " + num3 + " = ";
+                    } else if (sym2 == '÷') {
+                        if (transfer(answer1) == 0 && transfer(num3) != 0) {
+                            expression = expression + " ÷ " + num3 + " = ";
+                        } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
+                            expression = num3 + " ÷ " + expression + " = ";
+                        } else {
+                            expression = expression + " ÷ " + num3 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
+                } else if (expression.contains("+") == true || expression.contains("-") == true) {
+                    if (sym2 == '×') {
+                        expression = "(" + expression + ")" + " × " + num3 + " = ";
+                    } else if (sym2 == '÷') {
+                        if (transfer(answer1) == 0 && transfer(num3) != 0) {
+                            expression = "(" + expression + ")" + " ÷ " + num3 + " = ";
+                        } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
+                            expression = num3 + " ÷ " + "(" + expression + ")" + " = ";
+                        } else {
+                            expression = "(" + expression + ")" + " ÷ " + num3 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
+                }
             }
 
-            if (sym2 == '+') {
-                expression = expression + " + " + num3 + " = ";
-            } else if (sym2 == '-') {
-                if (islarge(answer1, num3)) {
-                    expression = expression + " - " + num3 + " = ";
-                } else {
-                    expression = num3 + " - " + expression + " = ";
-                }
-            } else if (sym2 == '×') {
-                expression = expression + " × " + num3 + " = ";
-            } else if (sym2 == '÷') {
-                if (transfer(answer1) == 0 && transfer(num3) != 0) {
-                    expression = expression + " ÷ " + num3 + " = ";
-                } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
-                    expression = num3 + " ÷ " + expression + " = ";
-                } else {
-                    expression = expression + " ÷ " + num3 + " = ";
-                }
-            }
-
-            finalexpression = expression;
-        } else {
+        } else if (choice == 3) {
             String expression = "";
             String num1 = randomNum(range);
             String num2 = randomNum(range);
@@ -317,60 +343,136 @@ public class Expression {
                 }
             }
 
-            String answer1 = Calculator.calculate(expression);
-            if (hasError(answer1)) {
-                return answer1;
+
+            if (sym2 == '+' || sym2 == '-') {
+
+                String answer1 = Calculator.calculate(expression);
+                if (hasError(answer1)) {
+                    return answer1;
+                }
+
+                if (sym2 == '+') {
+                    expression = expression + " + " + num3;
+                } else if (sym2 == '-') {
+                    if (islarge(answer1, num3)) {
+                        expression = expression + " - " + num3;
+                    } else {
+                        expression = num3 + " - " + expression;
+                    }
+                }
+
+            } else if (sym2 == '×' || sym2 == '÷') {
+                String answer1 = Calculator.calculate(expression);
+                if (hasError(answer1)) {
+                    return answer1;
+                }
+
+                if (expression.contains("×") == true || expression.contains("÷") == true) {
+                    if (sym2 == '×') {
+                        expression = expression + " × " + num3;
+                    } else if (sym2 == '÷') {
+                        if (transfer(answer1) == 0 && transfer(num3) != 0) {
+                            expression = expression + " ÷ " + num3;
+                        } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
+                            expression = num3 + " ÷ " + expression;
+                        } else {
+                            expression = expression + " ÷ " + num3;
+                        }
+                    }
+
+                } else if (expression.contains("+") == true || expression.contains("-") == true) {
+                    if (sym2 == '×') {
+                        expression = "(" + expression + ")" + " × " + num3;
+                    } else if (sym2 == '÷') {
+                        if (transfer(answer1) == 0 && transfer(num3) != 0) {
+                            expression = "(" + expression + ")" + " ÷ " + num3;
+                        } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
+                            expression = num3 + " ÷ " + "(" + expression + ")";
+                        } else {
+                            expression = "(" + expression + ")" + " ÷ " + num3;
+                        }
+                    }
+                }
             }
 
-            if (sym2 == '+') {
-                expression = expression + " + " + num3;
-            } else if (sym2 == '-') {
-                if (islarge(answer1, num3)) {
-                    expression = expression + " - " + num3;
-                } else {
-                    expression = num3 + " - " + expression;
+            if (sym3 == '+' || sym3 == '-') {
+                String answer2 = Calculator.calculate(expression);
+                if (hasError(answer2)) {
+                    return answer2;
                 }
-            } else if (sym2 == '×') {
-                expression = expression + " × " + num3;
-            } else if (sym2 == '÷') {
-                if (transfer(answer1) == 0 && transfer(num3) != 0) {
-                    expression = expression + " ÷ " + num3;
-                } else if (transfer(answer1) != 0 && transfer(num3) == 0) {
-                    expression = num3 + " ÷ " + expression;
-                } else {
-                    expression = expression + " ÷ " + num3;
+
+                if (sym3 == '+') {
+                    expression = expression + " + " + num4 + " = ";
+                } else if (sym3 == '-') {
+                    if (islarge(answer2, num4)) {
+                        expression = expression + " - " + num4 + " = ";
+                    } else {
+                        expression = num4 + " - " + expression + " = ";
+                    }
+                }
+
+                finalexpression = expression;
+            } else if (sym3 == '×' || sym3 == '÷') {
+                String answer2 = Calculator.calculate(expression);
+                if (hasError(answer2)) {
+                    return answer2;
+                }
+
+                if (expression.contains("×") == false && expression.contains("÷") == false) {
+                    if (sym3 == '×') {
+                        expression = "(" + expression + ")" + " × " + num4 + " = ";
+                    } else if (sym3 == '÷') {
+                        if (transfer(answer2) == 0 && transfer(num4) != 0) {
+                            expression = "(" + expression + ")" + " ÷ " + num4 + " = ";
+                        } else if (transfer(answer2) != 0 && transfer(num4) == 0) {
+                            expression = num4 + " ÷ " + "(" + expression + ")" + " = ";
+                        } else {
+                            expression = "(" + expression + ")" + " ÷ " + num4 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
+                } else if (expression.contains("+") == false && expression.contains("-") == false) {
+                    if (sym3 == '×') {
+                        expression = expression + " × " + num4 + " = ";
+                    } else if (sym3 == '÷') {
+                        if (transfer(answer2) == 0 && transfer(num4) != 0) {
+                            expression = expression + " ÷ " + num4 + " = ";
+                        } else if (transfer(answer2) != 0 && transfer(num4) == 0) {
+                            expression = num4 + " ÷ " + expression + " = ";
+                        } else {
+                            expression = expression + " ÷ " + num4 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
+                } else if (expression.contains("(")==true) {
+                    if (sym3 == '×') {
+                        expression = expression + " × " + num4 + " = ";
+                    } else if (sym3 == '÷') {
+                        if (transfer(answer2) == 0 && transfer(num4) != 0) {
+                            expression = expression + " ÷ " + num4 + " = ";
+                        } else if (transfer(answer2) != 0 && transfer(num4) == 0) {
+                            expression = num4 + " ÷ " + expression + " = ";
+                        } else {
+                            expression = expression + " ÷ " + num4 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
+                }else{
+                    if (sym3 == '×') {
+                        expression = "(" + expression + ")" + " × " + num4 + " = ";
+                    } else if (sym3 == '÷') {
+                        if (transfer(answer2) == 0 && transfer(num4) != 0) {
+                            expression = "(" + expression + ")" + " ÷ " + num4 + " = ";
+                        } else if (transfer(answer2) != 0 && transfer(num4) == 0) {
+                            expression = num4 + " ÷ " + "(" + expression + ")" + " = ";
+                        } else {
+                            expression = "(" + expression + ")" + " ÷ " + num4 + " = ";
+                        }
+                    }
+                    finalexpression = expression;
                 }
             }
-
-            String answer2 = Calculator.calculate(expression);
-            if (hasError(answer2)) {
-                return answer2;
-            }
-
-            if (sym3 == '+') {
-                expression = expression + " + " + num4 + " = ";
-            } else if (sym3 == '-') {
-                if (islarge(answer2, num4)) {
-                    expression = expression + " - " + num4 + " = ";
-                } else {
-                    expression = num4 + " - " + expression + " = ";
-                }
-            } else if (sym3 == '×') {
-                expression = expression + " × " + num4 + " = ";
-            } else if (sym3 == '÷') {
-                if (transfer(answer2) == 0 && transfer(num4) != 0) {
-                    expression = expression + " ÷ " + num4 + " = ";
-                } else if (transfer(answer2) != 0 && transfer(num4) == 0) {
-                    expression = num4 + " ÷ " + expression + " = ";
-                } else {
-                    expression = expression + " ÷ " + num4 + " = ";
-                }
-            }
-
-            finalexpression = expression;
-
         }
-
         return finalexpression;
     }
 
@@ -380,7 +482,7 @@ public class Expression {
      * @param exp
      * @return
      */
-    private static boolean hasError(String exp) {
+    public static boolean hasError(String exp) {
         return exp.matches("\\s*" + Calculator.ERROR_DIVIDE_BY_ZERO + "\\s*");
     }
 

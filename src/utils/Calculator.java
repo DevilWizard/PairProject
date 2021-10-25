@@ -1,6 +1,6 @@
 package utils;
 
-import entity.Fraction;
+import entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
