@@ -1,6 +1,6 @@
 package main;
 
-import ui.MainWindow;
+import ui.*;
 
 /**
  * 主函数，程序的入口
@@ -12,6 +12,5 @@ public class Main {
     public static void main(String[] args) {
         new MainWindow().init();
     }
-
 
 }

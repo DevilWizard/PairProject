@@ -1,6 +1,6 @@
 package utils;
 
-import entity.Fraction;
+import entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +44,6 @@ public class Calculator {
         List<String> infixList = parse2List(expression);
         List<String> polandList = parse2Poland(infixList);
         return calculate(polandList);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(calculate("15 ÷ 3 = "));
     }
 
     /**

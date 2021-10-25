@@ -1,7 +1,7 @@
 package ui;
 
 import main.MainHelper;
-import utils.FileUtils;
+import utils.*;
 
 import javax.swing.*;
 
