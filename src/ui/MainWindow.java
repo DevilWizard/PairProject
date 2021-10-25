@@ -88,9 +88,14 @@ public class MainWindow {
         });
 
         generateButton.addActionListener(e -> {
-            int r = Integer.parseInt(r_Tf.getText());
-            int n = Integer.parseInt(n_Tf.getText());
-            new Thread(() -> MainHelper.generate(r, n)).start();
+            if ("".equals(r_Tf.getText()) || "".equals(n_Tf.getText())) {
+                JOptionPane.showMessageDialog(null, "必须指定数值范围和题目数！", "警告", JOptionPane.WARNING_MESSAGE);
+            } else {
+                int r = Integer.parseInt(r_Tf.getText());
+                int n = Integer.parseInt(n_Tf.getText());
+                new Thread(() -> MainHelper.generate(r, n)).start();
+                JOptionPane.showMessageDialog(null, "题目和答案文件已输出至程序所在目录路径！", "成功", JOptionPane.INFORMATION_MESSAGE);
+            }
         });
 
     }

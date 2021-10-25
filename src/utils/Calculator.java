@@ -46,10 +46,6 @@ public class Calculator {
         return calculate(polandList);
     }
 
-    public static void main(String[] args) {
-        System.out.println(calculate("15 ÷ 3 = "));
-    }
-
     /**
      * 接收逆波兰式来计算表达式结果
      *
